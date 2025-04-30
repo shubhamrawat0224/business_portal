@@ -1,0 +1,57 @@
+.top-drivers {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.top-drivers h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #2c2c54;
+}
+
+.top-drivers ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.driver-card {
+  display: flex;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.driver-card:last-child {
+  border-bottom: none;
+}
+
+.driver-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 16px;
+  border: 2px solid #eee;
+}
+
+.driver-details {
+  flex: 1;
+}
+
+.driver-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2c2c54;
+  margin-bottom: 4px;
+}
+
+.driver-meta {
+  display: flex;
+  gap: 20px;
+  font-size: 0.9rem;
+  color: #57606f;
+}

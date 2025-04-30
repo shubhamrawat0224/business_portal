@@ -1,0 +1,49 @@
+.knowledge-base {
+  display: flex;
+  gap: 20px;
+  margin: 32px 0;
+  flex-wrap: wrap;
+}
+
+.kb-card {
+  flex: 1;
+  min-width: 180px;
+  background: #f5f7fa;
+  padding: 20px 24px;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: transform 0.2s;
+  cursor: pointer;
+}
+
+.kb-card:hover {
+  transform: translateY(-4px);
+}
+
+.kb-icon {
+  font-size: 1.6rem;
+  background: #ffffff;
+  padding: 10px;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.kb-label {
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: #2f3542;
+}
+
+/* Optional: color distinctions */
+.total-orders {
+  background-color: #dff1ff;
+}
+.total-earnings {
+  background-color: #ffe8e8;
+}
+.profit {
+  background-color: #fff3cd;
+}

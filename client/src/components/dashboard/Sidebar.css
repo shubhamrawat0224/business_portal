@@ -1,0 +1,62 @@
+.sidebar {
+  width: 240px;
+  background: #121212;
+  color: white;
+  min-height: 100vh;
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: url("https://randomuser.me/api/portraits/men/75.jpg") center/cover
+    no-repeat;
+  border: 2px solid #ffffff33;
+}
+
+.sidebar-user {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: white;
+}
+
+.sidebar-phone {
+  font-size: 0.85rem;
+  color: #bbbbbb;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.sidebar-nav a {
+  color: #cccccc;
+  text-decoration: none;
+  font-size: 0.95rem;
+  padding: 10px 14px;
+  border-radius: 8px;
+  transition: background 0.2s, color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sidebar-nav a:hover,
+.sidebar-nav a.active {
+  background-color: #ffffff10;
+  color: #ffffff;
+}
