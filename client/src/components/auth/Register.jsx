@@ -9,7 +9,13 @@ const Register = () => {
   const navigate = useNavigate();
 
   const formik = useFormik({
-    initialValues: { email: "", password: "", confirmPassword: "", name: "" },
+    initialValues: {
+      email: "",
+      password: "",
+      confirmPassword: "",
+      name: "",
+      role: "client", // Default role
+    },
     validationSchema: Yup.object({
       email: Yup.string().email("Invalid email").required("Required"),
       password: Yup.string().min(6, "Min 6 chars").required("Required"),
@@ -17,6 +23,9 @@ const Register = () => {
         .oneOf([Yup.ref("password"), null], "Passwords must match")
         .required("Required"),
       name: Yup.string().required("Required"),
+      role: Yup.string()
+        .oneOf(["admin", "driver", "client", "moderator"], "Invalid role")
+        .required("Required"),
     }),
     onSubmit: async (values, { setSubmitting, setErrors }) => {
       try {
@@ -24,6 +33,7 @@ const Register = () => {
           email: values.email,
           password: values.password,
           name: values.name,
+          role: values.role,
         });
         navigate("/verify-otp", { state: { email: values.email } });
       } catch (err) {
@@ -73,6 +83,25 @@ const Register = () => {
             />
             {formik.errors.email && (
               <div className="auth-error">{formik.errors.email}</div>
+            )}
+
+            <label className="auth-label" htmlFor="role">
+              Role
+            </label>
+            <select
+              id="role"
+              name="role"
+              className="auth-input"
+              onChange={formik.handleChange}
+              value={formik.values.role}
+            >
+              <option value="client">Client</option>
+              <option value="driver">Driver</option>
+              <option value="moderator">Moderator</option>
+              <option value="admin">Admin</option>
+            </select>
+            {formik.errors.role && (
+              <div className="auth-error">{formik.errors.role}</div>
             )}
 
             <label className="auth-label" htmlFor="password">

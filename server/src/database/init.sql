@@ -4,11 +4,11 @@ CREATE TABLE IF NOT EXISTS users (
     name VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
-    phone VARCHAR(30),
-    role VARCHAR(20) NOT NULL, -- admin, driver, client, moderator
+    otp VARCHAR(6),
     is_verified BOOLEAN DEFAULT FALSE,
-    branch_id INTEGER REFERENCES branches(id),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    country_code VARCHAR(2),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Create branches table
@@ -25,6 +25,13 @@ CREATE TABLE IF NOT EXISTS car_classes (
     description TEXT
 );
 
+-- Create shifts table first (since it's referenced by drivers)
+CREATE TABLE IF NOT EXISTS shifts (
+    id SERIAL PRIMARY KEY,
+    start_time TIMESTAMP,
+    end_time TIMESTAMP
+);
+
 -- Create drivers table
 CREATE TABLE IF NOT EXISTS drivers (
     id SERIAL PRIMARY KEY,
@@ -39,14 +46,6 @@ CREATE TABLE IF NOT EXISTS drivers (
 CREATE TABLE IF NOT EXISTS clients (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id) ON DELETE CASCADE
-);
-
--- Create shifts table
-CREATE TABLE IF NOT EXISTS shifts (
-    id SERIAL PRIMARY KEY,
-    driver_id INTEGER REFERENCES drivers(id) ON DELETE CASCADE,
-    start_time TIMESTAMP,
-    end_time TIMESTAMP
 );
 
 -- Create orders table

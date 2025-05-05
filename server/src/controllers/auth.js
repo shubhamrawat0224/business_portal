@@ -11,6 +11,18 @@ const generateOTP = () => {
 
 const getCountryFromIP = async (ip) => {
   try {
+    // Check if IP is localhost or private range
+    if (
+      ip === "::1" ||
+      ip === "127.0.0.1" ||
+      ip.startsWith("192.168.") ||
+      ip.startsWith("10.") ||
+      ip.startsWith("172.")
+    ) {
+      console.log("Local IP detected:", ip);
+      return "IN"; // Default to IN for development/testing
+    }
+
     const response = await axios.get(`http://ip-api.com/json/${ip}`, {
       timeout: 5000, // 5 second timeout
     });
@@ -20,16 +32,15 @@ const getCountryFromIP = async (ip) => {
     }
 
     console.error("IP API error:", response.data.message);
-    return null;
+    return ""; // Return empty string if API fails
   } catch (error) {
     console.error("Error fetching country:", error.message);
-    return null;
+    return ""; // Return empty string on error
   }
 };
 
 exports.register = async (req, res) => {
-  const { email, password, name, phone, role, car_class_id, branch_id } =
-    req.body;
+  const { email, password, name } = req.body;
   const clientIp = req.ip || req.connection.remoteAddress;
 
   try {
@@ -64,47 +75,22 @@ exports.register = async (req, res) => {
       });
     }
 
-    if (!role || !["admin", "driver", "client", "moderator"].includes(role)) {
-      return res.status(400).json({
-        status: "error",
-        message: "Invalid or missing user role",
-      });
-    }
-
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
     const otp = generateOTP();
 
     // Create user
     const userInsertQuery =
-      "INSERT INTO users (name, email, password, phone, role, is_verified, branch_id, created_at) VALUES ($1, $2, $3, $4, $5, $6, $7, NOW()) RETURNING id, name, email, role, phone, branch_id";
+      "INSERT INTO users (name, email, password, otp, is_verified, country_code) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, name, email";
     const userInsertValues = [
       name,
       email,
       hashedPassword,
-      phone || null,
-      role,
+      otp,
       false,
-      branch_id || null,
+      countryCode,
     ];
     const newUser = await pool.query(userInsertQuery, userInsertValues);
-    const userId = newUser.rows[0].id;
-
-    // Create driver or client record if needed
-    if (role === "driver") {
-      if (!car_class_id) {
-        return res.status(400).json({
-          status: "error",
-          message: "car_class_id is required for drivers",
-        });
-      }
-      await pool.query(
-        "INSERT INTO drivers (user_id, car_class_id) VALUES ($1, $2)",
-        [userId, car_class_id]
-      );
-    } else if (role === "client") {
-      await pool.query("INSERT INTO clients (user_id) VALUES ($1)", [userId]);
-    }
 
     // Send OTP via email
     await sendMail(email, "Your OTP Code", `Your OTP code is: ${otp}`);
